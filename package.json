@@ -1,0 +1,20 @@
+{
+  "name": "weather-web",
+  "version": "1.0.0",
+  "description": "App web simple para consultar el clima por ciudad y país usando OpenWeatherMap.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "weather",
+    "web",
+    "clima",
+    "node"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

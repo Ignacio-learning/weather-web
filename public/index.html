@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consulta de Clima</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true"></div>
+
+    <main class="container">
+      <header class="header">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">W</div>
+          <div>
+            <h1>Clima</h1>
+            <p>Consulta rápida por ciudad y país</p>
+          </div>
+        </div>
+      </header>
+
+      <section class="card">
+        <form id="weatherForm" class="form" autocomplete="off">
+          <div class="field">
+            <label for="city">Ciudad</label>
+            <input id="city" name="city" type="text" placeholder="Ej: Santiago" required />
+          </div>
+
+          <div class="field">
+            <label for="country">País (código)</label>
+            <input id="country" name="country" type="text" placeholder="Ej: CL, AR, MX" maxlength="2" />
+            <small>Opcional. Usa el código ISO-3166-1 alpha-2.</small>
+          </div>
+
+          <div class="actions">
+            <button id="submitBtn" type="submit">Consultar</button>
+            <button id="clearBtn" type="button" class="secondary">Limpiar</button>
+          </div>
+        </form>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+
+        <div id="result" class="result" hidden>
+          <div class="resultHeader">
+            <div>
+              <div id="place" class="place">—</div>
+              <div id="desc" class="desc">—</div>
+            </div>
+            <div class="tempWrap">
+              <div id="temp" class="temp">—</div>
+              <div class="badge" id="badge">—</div>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="metric">
+              <div class="k">Sensación</div>
+              <div class="v" id="feels">—</div>
+            </div>
+            <div class="metric">
+              <div class="k">Humedad</div>
+              <div class="v" id="hum">—</div>
+            </div>
+            <div class="metric">
+              <div class="k">Viento</div>
+              <div class="v" id="wind">—</div>
+            </div>
+            <div class="metric">
+              <div class="k">Presión</div>
+              <div class="v" id="press">—</div>
+            </div>
+            <div class="metric">
+              <div class="k">Mín / Máx</div>
+              <div class="v" id="minmax">—</div>
+            </div>
+            <div class="metric">
+              <div class="k">Coordenadas</div>
+              <div class="v" id="coords">—</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>Fuente: OpenWeatherMap</span>
+      </footer>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
+
