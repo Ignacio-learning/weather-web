@@ -53,7 +53,7 @@ function mapWeatherResponse(data) {
         if (!resp.ok) {
             const error = new Error(
                 resp.status === 404
-                ? "Ciudad no encontrada. REvisa el nombre y/o el pais."
+                ? "Ciudad no encontrada. Revisa el nombre y/o el pais."
                 : data?.message ?? `Error en la API externa (status ${resp.status})`
             );
             error.statusCode = resp.status === 404 ? 404 : 502;
