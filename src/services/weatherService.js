@@ -2,7 +2,8 @@
 const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
 function buildWeatherUrl(city, country) {
-    const q = country ? '${city}, ${country}' : city;
+    // OpenWeatherMap espera q="city,countryCode" (ISO-3166-1 alpha-2)
+    const q = country ? `${city},${country}` : city;
     const url = new URL(BASE_URL);
 
     url.searchParams.set("q", q);

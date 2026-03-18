@@ -5,7 +5,6 @@
 // ================================
 const form      = document.getElementById("weatherForm");
 const cityEl    = document.getElementById("city");
-const countryEl = document.getElementById("country");
 const statusEl  = document.getElementById("status");
 const resultEl  = document.getElementById("result");
 
@@ -45,6 +44,26 @@ let debounceTimer = null;
  * -1 = ninguno seleccionado (el usuario no usó el teclado todavía)
  */
 let activeIndex = -1;
+
+/**
+ * Última sugerencia elegida del autocomplete.
+ * Se invalida si el usuario vuelve a editar el input.
+ */
+let selectedCity = null;
+
+const regionNames =
+  typeof Intl !== "undefined" && typeof Intl.DisplayNames === "function"
+    ? new Intl.DisplayNames(["es"], { type: "region" })
+    : null;
+
+function displayCountry(code) {
+  if (!code) return "";
+  try {
+    return regionNames?.of(code) || code;
+  } catch {
+    return code;
+  }
+}
 
 // ================================
 // AUTOCOMPLETE — SETUP DEL DOM
@@ -89,9 +108,10 @@ function renderDropdown(cities) {
     li.dataset.index = index;
 
     // Separamos nombre del detalle para poder estilizarlos distinto
+    const countryLabel = displayCountry(city.country);
     li.innerHTML = `
       <span class="city-name">${city.name}</span>
-      <span class="city-detail">${city.country}${city.state ? ` — ${city.state}` : ""}</span>
+      <span class="city-detail">${countryLabel}${city.state ? ` — ${city.state}` : ""}</span>
     `;
 
     li.addEventListener("mousedown", (e) => {
@@ -115,7 +135,7 @@ function renderDropdown(cities) {
  */
 function selectCity(city) {
   cityEl.value = city.name;
-  countryEl.value = city.country ?? "";
+  selectedCity = city;
   closeDropdown();
   submitBtn.focus();
 }
@@ -173,6 +193,7 @@ async function fetchSuggestions(query) {
 
 cityEl.addEventListener("input", () => {
   const query = cityEl.value.trim();
+  selectedCity = null;
 
   // Limpiamos el debounce anterior antes de arrancar uno nuevo
   clearTimeout(debounceTimer);
@@ -306,7 +327,12 @@ function setStatus(text, type = "info") {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const city    = cityEl.value.trim();
-  const country = countryEl.value.trim().toUpperCase();
+
+  const selectedMatches =
+    selectedCity &&
+    typeof selectedCity.name === "string" &&
+    selectedCity.name.trim().toLowerCase() === city.toLowerCase();
+  const country = selectedMatches ? (selectedCity.country ?? "").toString().trim().toUpperCase() : "";
 
   closeDropdown();
   resultEl.hidden = true;
@@ -329,7 +355,7 @@ form.addEventListener("submit", async (e) => {
     setStatus("Listo.");
   } catch (err) {
     if (err.name !== "AbortError") {
-      setStatus(err.message || "Error al consultar.", "error");
+      setStatus(err.message || "Error al consultar.", "error"); // ← esto
     }
   } finally {
     submitBtn.disabled = false;
@@ -340,7 +366,7 @@ form.addEventListener("submit", async (e) => {
 
 clearBtn.addEventListener("click", () => {
   cityEl.value    = "";
-  countryEl.value = "";
+  selectedCity = null;
   resultEl.hidden = true;
   closeDropdown();
   setStatus("");
