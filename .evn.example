@@ -1,6 +1,0 @@
-# Clave de la API de OpenWeatherMap
-# Obtené una gratuita en: https://openweathermap.org/api
-OPENWEATHER_API_KEY=
-
-# Puerto donde corre el servidor
-PORT=5173

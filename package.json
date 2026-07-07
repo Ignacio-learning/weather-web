@@ -1,22 +1,22 @@
 {
-  "name": "weather-web",
-  "version": "1.0.0",
-  "description": "App web simple para consultar el clima por ciudad y país usando OpenWeatherMap.",
-  "main": "src/server.js",
-  "scripts": {
-    "start": "node src/server.js"
-  },
-  "keywords": [
-    "weather",
-    "web",
-    "clima",
-    "node"
+  "name": "chile-data-hub",
+  "version": "2.0.0",
+  "description": "Portal de datos chilenos: clima, indicadores económicos, sismos, feriados y más.",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
   ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c cyan,magenta \"npm -w server run dev\" \"npm -w client run dev\"",
+    "build": "npm -w client run build && npm -w server run build",
+    "start": "npm -w server run start",
+    "lint": "npm -w client run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "dotenv": "^17.3.1",
-    "express": "^4.19.2",
-    "express-rate-limit": "^8.3.1"
-  }
+  "license": "MIT"
 }
