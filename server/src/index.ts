@@ -4,27 +4,28 @@ import express from 'express';
 import cors from 'cors';
 
 config({ path: path.resolve(process.cwd(), '..', '.env') });
+
 import weatherRouter from './routes/weather.js';
 import geocodeRouter from './routes/geocode.js';
 import forecastRouter from './routes/forecast.js';
 import boostrRouter from './routes/boostr.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
 
+const isVercel = process.env.VERCEL === '1';
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
 const API_KEY = process.env.OPENWEATHER_API_KEY;
 
 if (!API_KEY) {
-  console.error('ERROR: Define OPENWEATHER_API_KEY en tu archivo .env');
-  process.exit(1);
+  const msg = isVercel
+    ? 'ERROR: Configura OPENWEATHER_API_KEY en las environment variables de Vercel'
+    : 'ERROR: Define OPENWEATHER_API_KEY en tu archivo .env';
+  console.error(msg);
+  if (!isVercel) process.exit(1);
 }
 
 const app = express();
 app.disable('x-powered-by');
 app.use(cors());
-
-// Static files (built client)
-const clientDist = path.resolve(process.cwd(), '..', 'client', 'dist');
-app.use(express.static(clientDist));
 
 // Rate limiter for API routes
 app.use('/api', apiLimiter);
@@ -35,11 +36,18 @@ app.use('/api', geocodeRouter);
 app.use('/api', forecastRouter);
 app.use('/api', boostrRouter);
 
-// SPA fallback
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(clientDist, 'index.html'));
-});
+// Static files & SPA fallback (only in local dev — Vercel handles it)
+if (!isVercel) {
+  const clientDist = path.resolve(process.cwd(), '..', 'client', 'dist');
+  app.use(express.static(clientDist));
 
-app.listen(PORT, () => {
-  console.log(`Servidor listo en http://localhost:${PORT}`);
-});
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+
+  app.listen(PORT, () => {
+    console.log(`Servidor listo en http://localhost:${PORT}`);
+  });
+}
+
+export default app;
