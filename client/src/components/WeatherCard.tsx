@@ -1,11 +1,11 @@
 import type { WeatherResponse } from '../types';
 
 function fmtC(n: number | null) {
-  return typeof n === 'number' ? `${Math.round(n)} °C` : '—';
+  return typeof n === 'number' ? `${Math.round(n)}°C` : '—';
 }
 
 function fmtPct(n: number | null) {
-  return typeof n === 'number' ? `${Math.round(n)} %` : '—';
+  return typeof n === 'number' ? `${Math.round(n)}%` : '—';
 }
 
 function fmtWind(n: number | null) {
@@ -50,9 +50,18 @@ export function WeatherCard({ data }: Props) {
   return (
     <div className="result">
       <div className="resultHeader">
-        <div>
-          <div className="place">{place}</div>
-          <div className="desc">{weather.description ?? '—'}</div>
+        <div className="result-main">
+          {weather.icon && (
+            <img
+              className="weather-icon-lg"
+              src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+              alt={weather.description ?? ''}
+            />
+          )}
+          <div>
+            <div className="place">{place}</div>
+            <div className="desc">{weather.description ?? '—'}</div>
+          </div>
         </div>
         <div className="tempWrap">
           <div className="temp">{fmtC(metrics.tempC)}</div>

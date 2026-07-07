@@ -1,24 +1,18 @@
 import { Link, useLocation } from 'react-router-dom';
 
-export function Layout() {
-  return (
-    <div className="bg" aria-hidden="true" />
-  );
-}
-
 export function Header() {
   const { pathname } = useLocation();
 
   return (
     <header className="header">
       <Link to="/" className="brand">
-        <div className="logo" aria-hidden="true">DH</div>
+        <div className="logo" aria-hidden="true">CD</div>
         <div>
           <h1>Chile Data Hub</h1>
-          <p>Clima, indicadores y datos de Chile</p>
+          <p>Clima e indicadores económicos</p>
         </div>
       </Link>
-      <nav className="nav">
+      <nav className="nav" aria-label="Navegación principal">
         <Link to="/" className={`nav-link${pathname === '/' ? ' active' : ''}`}>Clima</Link>
         <Link to="/economia" className={`nav-link${pathname === '/economia' ? ' active' : ''}`}>Economía</Link>
       </nav>

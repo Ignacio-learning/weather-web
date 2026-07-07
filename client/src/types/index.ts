@@ -10,19 +10,17 @@ export type {
 
 // ─── ECONOMÍA ──────────────────────────────────────────
 
+export interface BoostrEconomyResponse {
+  status: string;
+  data: Record<string, { date: string; value: number }>;
+}
+
 export interface EconomyIndicator {
   codigo: string;
   nombre: string;
   unidad: string;
   fecha: string;
   valor: number;
-}
-
-export interface EconomyIndicatorsResponse {
-  version: string;
-  autor: string;
-  fecha: string;
-  indicadores: Record<string, EconomyIndicator>;
 }
 
 export interface IndicatorSerie {

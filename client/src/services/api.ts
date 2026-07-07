@@ -2,7 +2,7 @@ import type {
   WeatherResponse,
   GeocodeResult,
   ForecastDay,
-  EconomyIndicatorsResponse,
+  BoostrEconomyResponse,
   IndicatorDetailResponse,
 } from '../types';
 
@@ -61,7 +61,7 @@ export function fetchBoostr<T>(path: string, signal?: AbortSignal) {
 // ─── ECONOMÍA ──────────────────────────────────────────
 
 export function fetchEconomyIndicators(signal?: AbortSignal) {
-  return fetchBoostr<EconomyIndicatorsResponse>('/economy/indicators', signal);
+  return fetchBoostr<BoostrEconomyResponse>('/economy/indicators', signal);
 }
 
 export function fetchEconomyIndicator(name: string, signal?: AbortSignal) {
