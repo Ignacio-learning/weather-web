@@ -3,6 +3,8 @@ import path from 'node:path';
 import express from 'express';
 import cors from 'cors';
 
+// Local: load .env from repo root. On Vercel, env vars come from the dashboard.
+config({ path: path.resolve(process.cwd(), '.env') });
 config({ path: path.resolve(process.cwd(), '..', '.env') });
 
 import weatherRouter from './routes/weather.js';
@@ -25,10 +27,23 @@ if (!API_KEY) {
 
 const app = express();
 app.disable('x-powered-by');
+// Required on Vercel (reverse proxy) so express-rate-limit can read client IP
+if (isVercel) {
+  app.set('trust proxy', 1);
+}
 app.use(cors());
 
 // Rate limiter for API routes
 app.use('/api', apiLimiter);
+
+// Health check (useful to verify the Vercel function boots)
+app.get('/api/health', (_req, res) => {
+  res.json({
+    ok: true,
+    vercel: isVercel,
+    hasOpenWeatherKey: Boolean(API_KEY),
+  });
+});
 
 // API routes
 app.use('/api', weatherRouter);
